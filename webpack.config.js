@@ -22,6 +22,10 @@ const config = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        loader: "babel-loader",
+      },
+      {
         test: /\.css$/,
         use: [
           'style-loader',
