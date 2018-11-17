@@ -15,7 +15,7 @@ const config = {
   devServer: {
     contentBase: path.join(__dirname, './dist'),
     port: '8080',
-    host: '0.0.0.0',  //支持ip来访问页面，否则只能通过localhost:8088来访问
+    host: '0.0.0.0',  //支持ip来访问页面，否则只能通过localhost:8080来访问
     historyApiFallback: true,  //所有404页面能跳转到index.html
     hot: true
   },
