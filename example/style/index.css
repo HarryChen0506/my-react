@@ -1,3 +1,11 @@
 .hello {
   color: blue;
 }
+.title {
+  font-size: 20px;
+  font-weight: 500;
+}
+.content {
+  font-size: 14px;
+  color: blue
+}
