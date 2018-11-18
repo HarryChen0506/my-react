@@ -7,11 +7,26 @@ function render (vdom, container) {
   console.log('render', vdom, container)
   // 渲染父元素
   const { props, type, key} = vdom
-  // 判断是不是文本，若是文本直接拼接字符串 return
+  // 判断是否文本，若是文本直接拼接字符串 return
   if (_.isString(vdom) || _.isNumber(vdom)) {
     container.innerText = container.innerText + vdom
     return
   }
+  // 判断是否组件
+  if (_.isFunction(vdom.type)) {
+    let component, returnVdom
+    if (vdom.type.prototype.render) {
+      // class 格式的组件
+      component = new vdom.type()
+      returnVdom = component.render()
+    } else {
+      // function 格式的组件
+      returnVdom = vdom.type()
+    }
+    render(returnVdom, container)
+    return
+  }
+  // 创建真实dom
   const element = document.createElement(type)
   for (let attr in props) {
     setAttribute(element, attr, props[attr])    
@@ -20,13 +35,8 @@ function render (vdom, container) {
   if (props && props.children ) {
     if (Array.isArray(props.children)) {
       props.children.forEach(child => {
-        // console.log('child', typeof child.type, child.type)   
-        if (typeof child.type === 'function') {
-          // 该vdom为纯函数返回的对象  
-          render(child.type(), element)  
-        } else {
-          render(child, element)          
-        }
+        // console.log('child', typeof child.type, child.type)
+        render(child, element)          
       });
     } else {
       render(props.children, element)
