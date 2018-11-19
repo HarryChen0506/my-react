@@ -17,7 +17,10 @@ function createElement (tag, props, ...children) {
     key
   }
 }
-
+/**
+ * Component 构造器
+ * @param {*} props new Component(props)
+ */
 function Component (props) {
   this.props = props || {}
   this.state = this.state || {}
@@ -27,10 +30,6 @@ Component.prototype = {
     console.log('setState', nextState)
     this.state = Object.assign({}, this.state, nextState)
     this._render(this)
-    // 重新渲染
-    // const returnVdom = this.render() // 重新渲染
-    // document.getElementById('my-root').innerHTML = null
-    // MyReactDom.render(returnVdom, document.getElementById('my-root'))
   },
   _render(component) {
     console.log('重新渲染组件');
