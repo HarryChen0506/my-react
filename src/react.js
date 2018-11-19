@@ -34,7 +34,7 @@ Component.prototype = {
   },
   _render(component) {
     console.log('重新渲染组件');
-    MyReactDom._render(component)
+    MyReactDom.render(component)
   }
 }
 

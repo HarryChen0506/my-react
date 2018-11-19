@@ -87,11 +87,11 @@ function setAttribute (dom, attr, value) {
 
 export const ReactDom = {
   render(vdom, container) {
-    container.innerHTML = null;
+    if (container) {
+      // 默认先清空父元素下的所有子元素
+      container.innerHTML = null;
+    }    
     render(vdom, container)
-  },
-  _render(component, container) {
-    _render (component, container)
   }
 }
 export default ReactDom
