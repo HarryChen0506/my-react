@@ -5,45 +5,55 @@ import _ from 'lodash'
 // 迭代父元素下的子元素children，递归调用render函数
 function render (vdom, container) {
   // console.log('render', vdom, container)
-  // 渲染父元素
+  let component, returnVdom
+  const { props } = vdom
+  // 判断是否组件
+  if (_.isFunction(vdom.type)) {
+    if (vdom.type.prototype.render) {
+      // class 格式的组件
+      component = new vdom.type(props)
+    } else {
+      // function 格式的组件
+      component = vdom.type(props)
+    } 
+  }
+  component ? _render(component, container) : _render(vdom, container)
+}
+
+function _render (component, container) {
+  const vdom = component.render ? component.render() : component
   const { props, type, key} = vdom
   // 判断是否文本，若是文本直接拼接字符串 return
   if (_.isString(vdom) || _.isNumber(vdom)) {
     container.innerText = container.innerText + vdom
     return
   }
-  // 判断是否组件
-  if (_.isFunction(vdom.type)) {
-    let component, returnVdom
-    if (vdom.type.prototype.render) {
-      // class 格式的组件
-      component = new vdom.type()
-      returnVdom = component.render()
-    } else {
-      // function 格式的组件
-      returnVdom = vdom.type()
-    }
-    render(returnVdom, container)
-    return
-  }
   // 创建真实dom
-  const element = document.createElement(type)
+  const dom = document.createElement(type)
   for (let attr in props) {
-    setAttribute(element, attr, props[attr])    
+    setAttribute(dom, attr, props[attr])    
   }
   // 迭代子元素， 递归render
   if (props && props.children ) {
     if (Array.isArray(props.children)) {
       props.children.forEach(child => {
         // console.log('child', typeof child.type, child.type)
-        render(child, element)          
+        render(child, dom)          
       });
     } else {
-      render(props.children, element)
+      render(props.children, dom)
     }    
   }
-  // 将真实dom 添加到父容器
-  container.appendChild(element)
+
+  // 组件container属性保存container信息
+  if (component.container) {  
+    // 注意：调用 setState 方法时是进入这段逻辑，从而实现我们将 dom 的逻辑与 setState 函数分离的目标；知识点: new 出来的同一个实例
+    component.container.innerHTML = null
+    component.container.appendChild(dom)
+    return
+  }
+  component.container = container
+  container.appendChild(dom)
 }
 
 // 属性赋值
@@ -79,6 +89,9 @@ export const ReactDom = {
   render(vdom, container) {
     container.innerHTML = null;
     render(vdom, container)
+  },
+  _render(component, container) {
+    _render (component, container)
   }
 }
 export default ReactDom
