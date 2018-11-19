@@ -4,7 +4,7 @@ import _ from 'lodash'
 // 第一步渲染最高父元素 将vdom转换成真实dom
 // 迭代父元素下的子元素children，递归调用render函数
 function render (vdom, container) {
-  console.log('render', vdom, container)
+  // console.log('render', vdom, container)
   // 渲染父元素
   const { props, type, key} = vdom
   // 判断是否文本，若是文本直接拼接字符串 return
@@ -66,6 +66,10 @@ function setAttribute (dom, attr, value) {
 
   if (attr === 'children') {
     // 不做处理
+  } else if (/^on\w+/.test(attr)) {
+    // 事件处理
+    const eventName = attr.toLocaleLowerCase().slice(2)
+    dom.addEventListener(eventName, value)
   } else {
     dom.setAttribute(attr, value)
   }

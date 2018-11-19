@@ -8,10 +8,13 @@ const Hello = function (){
     <span>Hello</span>
   )
 }
+function handleClick (e) {
+  console.log('click me', e)
+}
 const Demo = (
   <div className="title" style={{color: 'red', fontSize: '30px'}} key={'title'}>
     <Hello />
-    <span className="content">world!</span>
+    <button onClick={handleClick}>click me</button>  
   </div>
 )
 
