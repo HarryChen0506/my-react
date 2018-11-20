@@ -35,6 +35,7 @@ const React = {}
       func()
     }, 1000)
   }
+  const queue = [] // 队列,用来缓存setState,当数组长度大于0不执行
   /**
    * Component 构造器
    * @param {*} props new Component(props)
@@ -44,6 +45,18 @@ const React = {}
     this.state = this.state || {}
   }
   Component.prototype.setState = function (nextState, cb) {
+    if (queue.length === 0) {
+      // 当队列有component, 则不执行异步渲染
+      defer(() => {
+        this._render(this)
+      })
+    }
+    if (!queue.includes(this)) {
+      queue.push(this)
+    }
+    this._setState(nextState, cb)    
+  }
+  Component.prototype._setState = function (nextState, cb) {
     let state
     if (typeof nextState === 'function') {
       state = nextState(this.state, this.props)
@@ -52,21 +65,19 @@ const React = {}
     }
     this.state = Object.assign({}, this.state, state)
     typeof cb === 'function' && cb()
-
     console.log('setState', this.state)
-    
-    defer(() => {
-      this._render(this)
-    })
   }
-  Component.prototype._render = function (component) {
+  Component.prototype._render = function () {
     console.log('重新渲染组件');
-    MyReactDom.render(component)
+    let component
+    while(component = queue.shift()) {
+      MyReactDom.render(component)   
+    }
   }
 
   // 闭包
   React.Component = Component  
 })(React)
 
-console.log('React', React)
+// console.log('React', React)
 export default React
