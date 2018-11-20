@@ -55,8 +55,15 @@ class Hello1 extends MyReact.Component {
   handleClick (e) {
     // console.log('click me', e)
     const count = this.state.count
-    this.setState({
-      count: count + 1
+    this.setState((preState, props) => {
+      return {
+        count: preState.count + 1
+      }
+    })
+    this.setState((preState, props) => {
+      return {
+        count: preState.count + 1
+      }
     })
   }
   render () {
