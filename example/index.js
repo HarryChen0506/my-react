@@ -60,11 +60,6 @@ class Hello1 extends MyReact.Component {
         count: preState.count + 1
       }
     })
-    this.setState((preState, props) => {
-      return {
-        count: preState.count + 1
-      }
-    })
   }
   render () {
     return (

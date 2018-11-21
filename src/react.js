@@ -31,9 +31,8 @@ const React = {}
 ;(function (React) {
   const defer = (func) => {
     setTimeout(() => {
-      console.log('异步执行')
       func()
-    }, 1000)
+    }, 0)
   }
   const queue = [] // 队列,用来缓存setState,当数组长度大于0不执行
   /**

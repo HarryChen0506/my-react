@@ -21,13 +21,13 @@ function render (vdom, container) {
 }
 
 function _render (component, container) {
-  const vdom = component.render ? component.render() : component
-  const { props, type, key} = vdom
+  const vdom = component.render ? component.render() : component  
   // 判断是否文本，若是文本直接拼接字符串 return
   if (_.isString(vdom) || _.isNumber(vdom)) {
     container.innerText = container.innerText + vdom
     return
   }
+  const { props, type, key} = vdom
   // 创建真实dom
   const dom = document.createElement(type)
   for (let attr in props) {
