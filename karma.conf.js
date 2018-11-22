@@ -1,6 +1,6 @@
 // Karma configuration
 // Generated on Wed Nov 21 2018 21:14:08 GMT+0800 (中国标准时间)
-
+// var webpack = require('webpack');
 module.exports = function(config) {
   config.set({
 
@@ -10,7 +10,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'chai-sinon'],
 
 
     // list of files / patterns to load in the browser
@@ -33,7 +33,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/**/*.test.js': ['coverage']
+      'test/**/*.test.js': ['webpack','coverage']
     },
 
 
@@ -57,6 +57,14 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    /**
+     * 日志等级
+     * config.LOG_DISABLE //不输出信息
+     * config.LOG_ERROR  //只输出错误信息
+     * config.LOG_WARN //只输出警告信息
+     * config.LOG_INFO //输出全部信息
+     * config.LOG_DEBUG //输出调试信息
+     */
     logLevel: config.LOG_INFO,
 
 
@@ -75,6 +83,36 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    webpack: {
+      mode: 'development',
+      devtool: 'inline-source-map',
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            loader: "babel-loader",
+          },
+          // {
+          //   test: /\.css$/,
+          //   use: [
+          //     'style-loader',
+          //     'css-loader'
+          //   ]
+          // },
+          // {
+          //   test: /\.(png|svg|jpg|gif)$/,
+          //   use: [
+          //     'file-loader'
+          //   ]
+          // }
+        ]
+      },
+    },
+
+    webpackMiddleware: {
+      noInfo: true
+    }
   })
 }

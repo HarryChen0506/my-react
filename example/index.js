@@ -75,7 +75,7 @@ const Demo1 = (
      <Hello1 name="harry"/>    
   </div>
 )
-console.log('Demo1', Demo1)
+
 // 渲染MyReactDOm
 function renderMyReactDom () {  
   MyReactDom.render(

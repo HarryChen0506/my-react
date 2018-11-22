@@ -4,7 +4,7 @@ import _ from 'lodash'
 // 第一步渲染最高父元素 将vdom转换成真实dom
 // 迭代父元素下的子元素children，递归调用render函数
 function render (vdom, container) {
-  // console.log('render', vdom, container)
+  // console.log('render', vdom, container)  
   let component, returnVdom
   const { props } = vdom
   // 判断是否组件
@@ -12,16 +12,21 @@ function render (vdom, container) {
     if (vdom.type.prototype.render) {
       // class 格式的组件
       component = new vdom.type(props)
+      // console.log('render component', component)  
     } else {
       // function 格式的组件
       component = vdom.type(props)
     } 
+  } else if (_.isFunction(vdom)) {
+    // 如果参数是个类，则初始化一个实例（本项目特殊处理）
+    // component = new vdom()
   }
   component ? _render(component, container) : _render(vdom, container)
 }
 
 function _render (component, container) {
   const vdom = component.render ? component.render() : component  
+  // console.log('render vdom', vdom, container)   
   // 判断是否文本，若是文本直接拼接字符串 return
   if (_.isString(vdom) || _.isNumber(vdom)) {
     container.innerText = container.innerText + vdom
@@ -38,7 +43,7 @@ function _render (component, container) {
     if (Array.isArray(props.children)) {
       props.children.forEach(child => {
         // console.log('child', typeof child.type, child.type)
-        render(child, dom)          
+        render(child, dom)
       });
     } else {
       render(props.children, dom)

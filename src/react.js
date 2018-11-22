@@ -13,14 +13,15 @@ const React = {}
   function createElement (tag, props, ...children) {
     // console.log('myCreateElement', tag, props, children)
     const {key, ...restProps} = props || {}
-    return {
-      props: {
+    const result =  {
+      props: {        
+        ...restProps,
         children: children,
-        ...restProps
       },
       type: tag,
       key
     }
+    return result
   }
   React.createElement = createElement
 })(React)
