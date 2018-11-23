@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const config = {
   entry: {
     app: './example/index.js',
-    react: './example/react.js'
+    react: './example/react_example.js'
   },
   output: {
     filename: '[name].bundle.js',

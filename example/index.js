@@ -69,7 +69,7 @@ class Hello1 extends MyReact.Component {
   render () {
     return (
       <div className="wrap">
-        <Foo />
+        {/* <Foo /> */}
         <span name="span">hello1, {this.state.count}</span>
         <button onClick={this.handleClick}>click me</button>  
       </div>      
@@ -79,6 +79,7 @@ class Hello1 extends MyReact.Component {
 const Demo1 = (
   <div className="title" style={{color: 'red', fontSize: '30px'}} key={'title'}>
      <Hello1 name="harry"/>    
+     {/* <span>123</span> */}
   </div>
 )
 
