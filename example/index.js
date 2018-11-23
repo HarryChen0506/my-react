@@ -44,6 +44,11 @@ import './style/index.css'
 
 // 替换本项目的react.createElement方法
 React.createElement = MyReact.createElement
+class Foo extends MyReact.Component {
+  render () {
+    return <span>组件</span>
+  }
+}
 class Hello1 extends MyReact.Component {
   constructor (props) {
     super(props)
@@ -64,6 +69,7 @@ class Hello1 extends MyReact.Component {
   render () {
     return (
       <div className="wrap">
+        <Foo />
         <span name="span">hello1, {this.state.count}</span>
         <button onClick={this.handleClick}>click me</button>  
       </div>      

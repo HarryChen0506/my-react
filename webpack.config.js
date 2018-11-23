@@ -4,7 +4,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const config = {
   entry: {
-    app: './example/index.js'
+    app: './example/index.js',
+    react: './example/react.js'
   },
   output: {
     filename: '[name].bundle.js',
