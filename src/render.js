@@ -1,55 +1,15 @@
 import utils from './utils/utils'
+import diff from './diff.js'
 import _ from 'lodash'
 // 组件component是一种特殊的vdom, vdom.type是函数,并且拥有render函数
 // 功能和 ReactDom.render() 类似
 // 第一步渲染最高父元素 将vdom转换成真实dom
 // 迭代父元素下的子元素children，递归调用render函数
+// render 将虚拟vdom进行渲染
 function render (vdom, container) {
-  // console.log('render', vdom)  // 组件
-  let component, returnVdom
-  const { props } = vdom
-  // 判断是否组件
-  if (_.isFunction(vdom.type)) {
-    component = createComponent(vdom)
-  }
-  component ? _render(component, container) : _render(vdom, container)
-}
-
-function _render (component, container) {
-  const vdom = component.render ? component.render() : component  
-  // console.log('_render vdom', vdom)
-  // 判断是否文本，若是文本直接拼接字符串 return
-  if (_.isString(vdom) || _.isNumber(vdom)) {
-    container.innerText = container.innerText + vdom
-    return
-  }
-  const { props, type, key} = vdom
-  // 创建真实dom
-  const dom = document.createElement(type)
-  for (let attr in props) {
-    setAttribute(dom, attr, props[attr])    
-  }
-  // 迭代子元素， 递归render
-  if (props && props.children ) {
-    if (Array.isArray(props.children)) {
-      props.children.forEach(child => {
-        // console.log('child', typeof child.type, child.type)
-        render(child, dom)
-      });
-    } else {
-      render(props.children, dom)
-    }    
-  }
-  // console.log('dom', dom, typeof dom)
-  // 组件container属性保存container信息
-  if (component.container) {      
-    // 注意：调用 setState 方法时是进入这段逻辑，从而实现我们将 dom 的逻辑与 setState 函数分离的目标；知识点: new 出来的同一个实例
-    component.container.innerHTML = null
-    component.container.appendChild(dom)
-    return
-  }
-  component.container = container
-  container.appendChild(dom)
+  // console.log('render', vdom, container)
+  const dom = vdomToDom(vdom)
+  container && container.appendChild(dom)
 }
 
 // 属性赋值
@@ -112,9 +72,22 @@ function createComponent (vdom = {}) {
 function renderComponent (component) {  
   let base, rendered
   rendered = component.render()
-  base = vdomToDom(rendered)
-  console.log('renderComponent', component, base);
+
+  // if (component.base) {
+  //   // console.log('diff')
+  //   // base = diff(component.base, rendered)
+  // }
+
+  base = vdomToDom(rendered) 
+
+  if (component.base && component.base.parentNode) { // setState 进入此逻辑
+    // Node.replaceChild(newnode,oldnode)
+    console.log('component.base', component.base, component.base.parentNode)
+    // setState后，组件父容器进行子元素的替换
+    component.base.parentNode.replaceChild(base, component.base)
+  }
   component.base = base
+  console.log('renderComponent', component, base, base.parentNode);
 }
 
 // vdomToDom 将vdom转化成dom,返回dom,并挂载到container上
@@ -143,21 +116,16 @@ function vdomToDom (vdom) {
     if (Array.isArray(props.children)) {
       props.children.forEach(child => {
         // console.log('child', typeof child.type, child.type)
-        newRender(child, dom)
+        render(child, dom)
       });
     } else {
-      newRender(props.children, dom)
+      render(props.children, dom)
     }    
   }
   return dom
 }
 
-// newRender 将虚拟vdom进行渲染
-function newRender (vdom, container) {
-  // console.log('newRender', vdom, container)
-  const dom = vdomToDom(vdom)
-  container && container.appendChild(dom)
-}
+
 
 
 export const ReactDom = {
@@ -167,7 +135,7 @@ export const ReactDom = {
       container.innerHTML = null;
     }    
     // render(vdom, container)
-    newRender(vdom, container)
+    render(vdom, container)
   },
   renderComponent(component) {
     renderComponent(component)    
