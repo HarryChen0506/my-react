@@ -79,27 +79,35 @@ function renderComponent (component, notReceiveProps) {
   if (!notReceiveProps && component.base && typeof component.componentWillReceiveProps === 'function') {
     component.componentWillReceiveProps(component.props)
   }
+  console.log('parentNode before', component.base && component.base.parentNode)
 
   rendered = component.render()
 
-  // if (component.base) {
-  //   // console.log('diff')
-  //   // base = diff(component.base, rendered)
-  // }
+  if (component.base) {
+    base = diff(component.base, rendered)
+    // base = component.base
+  } else {
+    base = vdomToDom(rendered) 
+  }
   
-  base = vdomToDom(rendered) 
 
   // 生命周期-didMount
   if (!component.base && typeof component.componentDidMount === 'function') {
     component.componentDidMount()
   }
 
+  console.log('parentNode after', component.base && component.base.parentNode)
+
   if (component.base && component.base.parentNode) { // setState 进入此逻辑
     // Node.replaceChild(newnode,oldnode)
-    // setState后，组件父容器进行子元素的替换
-    component.base.parentNode.replaceChild(base, component.base)
+    // setState后，组件父容器进行子元素的替换    
+    // component.base.parentNode.replaceChild(base, component.base)
   }
   component.base = base
+
+  if (!_.isFunction(rendered && rendered.type)) { // 见 [踩坑日志](https://github.com/MuYunyun/cpreact/issues/2)
+    base._component = component  // 同时将 component 赋到新得到的 dom 上
+  }
 }
 
 // vdomToDom 将vdom转化成dom,返回dom,并挂载到container上
@@ -139,7 +147,10 @@ function vdomToDom (vdom) {
 
 
 
-
+export {
+  renderComponent,
+  vdomToDom
+}
 export const ReactDom = {
   render(vdom, container) {
     if (container) {

@@ -99,7 +99,7 @@ class Hello1 extends MyReact.Component {
     console.log('Hello1 render !!')
     return (
       <div className="wrap">
-        <Foo />
+        {/* <Foo /> */}
         <span name="span">hello1, {this.state.count}</span>
         <button onClick={this.handleClick}>click me</button>  
       </div>      
