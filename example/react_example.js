@@ -30,18 +30,20 @@ class Hello extends React.Component {
       count: 1
     }
   }
+  // componentWillMount () {
+  //   console.log('react componentWillMount')
+  // }
+  // componentDidMount () {
+  //   console.log('react componentDidMount')
+  // }
 
-  componentDidMount () {
-    // console.log('react componentDidMount')
-  }
-
-  componentWillReceiveProps(props) {
-    console.log('Hello componentWillReceiveProps', props)
-  }
+  // componentWillReceiveProps(props) {
+  //   console.log('Hello componentWillReceiveProps', props)
+  // }
   
-  componentWillUpdate (props, state) {
-    console.log('Hello componentWillUpdate', props, state)
-  }
+  // componentWillUpdate (props, state) {
+  //   console.log('Hello componentWillUpdate', props, state)
+  // }
   
   handleClick (e) {
     // console.log('click me', e)

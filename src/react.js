@@ -71,7 +71,7 @@ const React = {}
     console.log('重新渲染组件');
     let component
     while(component = queue.shift()) {
-      MyReactDom.renderComponent(component)
+      MyReactDom.renderComponent(component, true)
     }
   }
 

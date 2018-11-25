@@ -69,25 +69,37 @@ function createComponent (vdom = {}) {
  * renderComponent 自定义组件渲染逻辑 只渲染自定义组件
  * @param {*} component 
  */
-function renderComponent (component) {  
+function renderComponent (component, notReceiveProps) {  
   let base, rendered
+  // 生命周期-willMount
+  if (!component.base && typeof component.componentWillMount === 'function') {
+    component.componentWillMount()
+  }
+  // 生命周期-willReceiveProps setState组件本身不进入ReceiveProps
+  if (!notReceiveProps && component.base && typeof component.componentWillReceiveProps === 'function') {
+    component.componentWillReceiveProps(component.props)
+  }
+
   rendered = component.render()
 
   // if (component.base) {
   //   // console.log('diff')
   //   // base = diff(component.base, rendered)
   // }
-
+  
   base = vdomToDom(rendered) 
+
+  // 生命周期-didMount
+  if (!component.base && typeof component.componentDidMount === 'function') {
+    component.componentDidMount()
+  }
 
   if (component.base && component.base.parentNode) { // setState 进入此逻辑
     // Node.replaceChild(newnode,oldnode)
-    console.log('component.base', component.base, component.base.parentNode)
     // setState后，组件父容器进行子元素的替换
     component.base.parentNode.replaceChild(base, component.base)
   }
   component.base = base
-  console.log('renderComponent', component, base, base.parentNode);
 }
 
 // vdomToDom 将vdom转化成dom,返回dom,并挂载到container上
@@ -137,8 +149,6 @@ export const ReactDom = {
     // render(vdom, container)
     render(vdom, container)
   },
-  renderComponent(component) {
-    renderComponent(component)    
-  }
+  renderComponent
 }
 export default ReactDom

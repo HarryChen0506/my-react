@@ -45,6 +45,26 @@ import './style/index.css'
 // 替换本项目的react.createElement方法
 React.createElement = MyReact.createElement
 class Foo extends MyReact.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      name: "Foo"
+    }
+  }
+  componentWillMount () {
+    console.log('Foo componentWillMount !!!')
+  } 
+  componentDidMount () {
+    console.log('Foo componentDidMount !!!')
+  }
+  componentWillReceiveProps(props) {
+    console.log('Foo componentWillReceiveProps !!!', props)
+  }
+
+  componentWillUpdate (props, state) {
+    console.log('Foo componentWillUpdate !!!', props, state)
+  }
+
   render () {
     return <span>组件</span>
   }
@@ -57,6 +77,15 @@ class Hello1 extends MyReact.Component {
       count: 1
     }
   }
+  componentWillMount () {
+    console.log('Hello1 componentWillMount !!')
+  }  
+  componentDidMount () {
+    console.log('Hello1 componentDidMount !!')
+  }
+  componentWillReceiveProps(props) {
+    console.log('Hello1 componentWillReceiveProps', props)
+  }
   handleClick (e) {
     // console.log('click me', e)
     const count = this.state.count
@@ -67,9 +96,10 @@ class Hello1 extends MyReact.Component {
     })
   }
   render () {
+    console.log('Hello1 render !!')
     return (
       <div className="wrap">
-        {/* <Foo /> */}
+        <Foo />
         <span name="span">hello1, {this.state.count}</span>
         <button onClick={this.handleClick}>click me</button>  
       </div>      
