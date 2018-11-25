@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { renderComponent, vdomToDom } from './render'
-function diff (oldDom, newVdom) {  
+function diff (oldDom, newVdom) {
+  console.log('diff', oldDom, newVdom)    
   if (oldDom === null) {
     return newVdom
   }
@@ -17,14 +18,14 @@ function diff (oldDom, newVdom) {
     return diffComponent(oldDom, newVdom)
   }
   if (oldDom.nodeName.toLowerCase() !== newVdom.type) { // 对比非文本节点
-    // console.log('diffNotTextDom')
+    console.log('diffNotTextDom')
     diffNotTextDom(oldDom, newVdom)
   }
   if (newVdom.props.children.length > 0) {
     console.log('diffChild')
     diffChild(oldDom, newVdom)
   }
-  console.log('diff', oldDom, newVdom)  
+  
 
   return oldDom
 }

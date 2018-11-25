@@ -98,11 +98,6 @@ function renderComponent (component, notReceiveProps) {
 
   console.log('parentNode after', component.base && component.base.parentNode)
 
-  if (component.base && component.base.parentNode) { // setState 进入此逻辑
-    // Node.replaceChild(newnode,oldnode)
-    // setState后，组件父容器进行子元素的替换    
-    // component.base.parentNode.replaceChild(base, component.base)
-  }
   component.base = base
 
   if (!_.isFunction(rendered && rendered.type)) { // 见 [踩坑日志](https://github.com/MuYunyun/cpreact/issues/2)
