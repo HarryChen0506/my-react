@@ -95,12 +95,18 @@ class Hello1 extends MyReact.Component {
       }
     })
   }
+  renderCount () {
+    if (this.state.count % 2 === 0) {
+      return <span name="span">hello1, {this.state.count}</span>
+    } else {
+      return <div name="span">hello1, {this.state.count}</div>
+    }    
+  }
   render () {
     console.log('Hello1 render !!')
     return (
-      <div className="wrap">
-        {/* <Foo /> */}
-        <span name="span">hello1, {this.state.count}</span>
+      <div className="wrap">        
+        {this.renderCount()}
         <button onClick={this.handleClick}>click me</button>  
       </div>      
     )

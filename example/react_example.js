@@ -6,7 +6,7 @@ class Foo extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      name: "Foo"
+      name: "Foo",
     }
   }
 
@@ -18,7 +18,17 @@ class Foo extends React.Component {
     console.log('Foo componentWillUpdate', props, state)
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    console.log('Foo shouldComponentUpdate', nextProps, nextState)
+    // if (nextProps.title !== this.props.title) {
+    //   return true
+    // }
+    // return false
+    return true
+  }
+
   render () {
+    console.log('Foo render')
     return <span>组件</span>
   }
 }
@@ -52,11 +62,18 @@ class Hello extends React.Component {
       count: count + 1
     })
   }
+  renderCount () {
+    if (this.state.count % 2 === 0) {
+      return <span name="span">hello1, {this.state.count}</span>
+    } else {
+      return <div name="span">hello1, {this.state.count}</div>
+    }    
+  }
   render () {
     return (
       <div className="wrap">
         <Foo title="foo"/>
-        <span name="span">hello, {this.state.count}</span>
+        {this.renderCount()}
         <button onClick={this.handleClick}>click me</button>  
       </div>      
     )

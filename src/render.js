@@ -101,6 +101,7 @@ function renderComponent (component, notReceiveProps) {
   component.base = base
 
   if (!_.isFunction(rendered && rendered.type)) { // 见 [踩坑日志](https://github.com/MuYunyun/cpreact/issues/2)
+    // console.log('!_.isFunction(rendered && rendered.type)')
     base._component = component  // 同时将 component 赋到新得到的 dom 上
   }
 }

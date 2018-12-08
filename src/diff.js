@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { renderComponent, vdomToDom } from './render'
 function diff (oldDom, newVdom) {
   console.log('diff', oldDom, newVdom)    
-  if (oldDom === null) {
+  if (newVdom === null) {
     return newVdom
   }
 
@@ -110,7 +110,7 @@ function diffChild(oldDom, newVdom) {
         if (newChildNodes[i] === null) {
           children[i].replaceWith('')
         }
-        if (newChildNodes[i] && newChildNodes[i].nodeName) { // 后期虚拟 dom 考虑用类代替工厂模式，从而进行稳妥的比较
+        if (newChildNodes[i] && newChildNodes[i].type) { // 后期虚拟 dom 考虑用类代替工厂模式，从而进行稳妥的比较
           children[i].replaceWith(vdomToDom(newChildNodes[i]))
         }
         children[i].replaceWith(newChildNodes[i])
